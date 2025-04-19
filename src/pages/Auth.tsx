@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,6 +14,35 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data.session) {
+        navigate('/marketplace');
+      }
+    };
+    
+    checkUser();
+    
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === 'SIGNED_IN' && session) {
+          navigate('/marketplace');
+          toast({
+            title: "Success!",
+            description: "You have successfully logged in.",
+          });
+        }
+      }
+    );
+    
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate]);
+
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -25,11 +54,6 @@ const Auth = () => {
           password,
         });
         if (error) throw error;
-        toast({
-          title: "Success!",
-          description: "You have successfully logged in.",
-        });
-        navigate('/marketplace');
       } else {
         const { error } = await supabase.auth.signUp({
           email,
@@ -37,9 +61,10 @@ const Auth = () => {
         });
         if (error) throw error;
         toast({
-          title: "Success!",
-          description: "Please check your email to verify your account.",
+          title: "Registration successful!",
+          description: "Please check your email to verify your account. If you don't see email verification in your Supabase settings, you can log in right away.",
         });
+        setIsLogin(true); // Switch to login view after registration
       }
     } catch (error) {
       toast({

@@ -1,23 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import NavBar from '@/components/layout/NavBar';
 import Footer from '@/components/layout/Footer';
-
-interface Product {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  seller: string;
-  category: string;
-  condition: string;
-  image: string;
-  createdAt: string;
-}
+import MarketplaceFilters from '@/components/marketplace/MarketplaceFilters';
+import ProductsGrid from '@/components/marketplace/ProductsGrid';
+import { Product } from '@/types/marketplace';
 
 const mockProducts: Product[] = [
   {
@@ -96,7 +83,6 @@ const Marketplace = () => {
   const [sortOption, setSortOption] = useState('latest');
 
   useEffect(() => {
-    // In a real app, this would be an API call
     setProducts(mockProducts);
     setFilteredProducts(mockProducts);
   }, []);
@@ -104,12 +90,10 @@ const Marketplace = () => {
   useEffect(() => {
     let result = [...products];
     
-    // Apply category filter
     if (category !== 'all') {
       result = result.filter(product => product.category.toLowerCase() === category.toLowerCase());
     }
     
-    // Apply search filter
     if (searchTerm) {
       result = result.filter(product => 
         product.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -117,7 +101,6 @@ const Marketplace = () => {
       );
     }
     
-    // Apply sorting
     if (sortOption === 'price-low') {
       result.sort((a, b) => a.price - b.price);
     } else if (sortOption === 'price-high') {
@@ -139,44 +122,14 @@ const Marketplace = () => {
             <p className="text-gray-600 text-lg">Buy, sell, or trade items with fellow USTP students</p>
           </div>
           
-          <div className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-sm mb-6 transition-all duration-300 hover:shadow-md">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="relative">
-                <Input
-                  placeholder="Search for items..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-4 transition-all duration-300 focus:ring-2 focus:ring-ustp-yellow"
-                />
-              </div>
-              <div>
-                <Select value={category} onValueChange={setCategory}>
-                  <SelectTrigger className="w-full transition-all duration-300 hover:border-ustp-blue">
-                    <SelectValue placeholder="Select Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="books">Books</SelectItem>
-                    <SelectItem value="electronics">Electronics</SelectItem>
-                    <SelectItem value="clothing">Clothing</SelectItem>
-                    <SelectItem value="school supplies">School Supplies</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Select value={sortOption} onValueChange={setSortOption}>
-                  <SelectTrigger className="w-full transition-all duration-300 hover:border-ustp-blue">
-                    <SelectValue placeholder="Sort By" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="latest">Latest</SelectItem>
-                    <SelectItem value="price-low">Price: Low to High</SelectItem>
-                    <SelectItem value="price-high">Price: High to Low</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </div>
+          <MarketplaceFilters
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            category={category}
+            setCategory={setCategory}
+            sortOption={sortOption}
+            setSortOption={setSortOption}
+          />
           
           <div className="mb-4 flex justify-end">
             <Button 
@@ -186,52 +139,7 @@ const Marketplace = () => {
             </Button>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product, index) => (
-                <Card 
-                  key={product.id} 
-                  className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 animate-fade-in"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div className="h-48 overflow-hidden group">
-                    <img 
-                      src={product.image} 
-                      alt={product.title} 
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
-                  </div>
-                  <CardHeader className="p-4 pb-2">
-                    <CardTitle className="text-lg text-ustp-darkblue">{product.title}</CardTitle>
-                    <CardDescription className="text-ustp-blue font-semibold">
-                      ₱{product.price.toFixed(2)}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-4 pt-0">
-                    <p className="text-sm text-gray-600 line-clamp-2">{product.description}</p>
-                    <div className="flex justify-between mt-2 text-xs text-gray-500">
-                      <span className="bg-ustp-gray/50 px-2 py-1 rounded-full">{product.category}</span>
-                      <span className="bg-ustp-gray/50 px-2 py-1 rounded-full">{product.condition}</span>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="p-4 pt-0 flex justify-between items-center">
-                    <span className="text-xs text-gray-500">Posted by {product.seller}</span>
-                    <Button 
-                      size="sm" 
-                      className="bg-ustp-blue text-white hover:bg-ustp-darkblue transition-colors duration-300"
-                    >
-                      View Details
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))
-            ) : (
-              <div className="col-span-3 text-center py-12 animate-fade-in">
-                <h3 className="text-xl font-semibold text-gray-600">No items found</h3>
-                <p className="text-gray-500 mt-2">Try adjusting your search or filters</p>
-              </div>
-            )}
-          </div>
+          <ProductsGrid products={filteredProducts} />
         </div>
       </main>
       <Footer />

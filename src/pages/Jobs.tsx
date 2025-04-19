@@ -1,0 +1,257 @@
+
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import NavBar from '@/components/layout/NavBar';
+import Footer from '@/components/layout/Footer';
+import { Badge } from '@/components/ui/badge';
+
+interface Job {
+  id: number;
+  title: string;
+  company: string;
+  location: string;
+  description: string;
+  type: string;
+  salary: string;
+  deadline: string;
+  postedDate: string;
+  logo: string;
+  tags: string[];
+}
+
+const mockJobs: Job[] = [
+  {
+    id: 1,
+    title: "Web Developer Intern",
+    company: "TechSolutions Inc.",
+    location: "Cagayan de Oro",
+    description: "Looking for a web developer intern to assist in building responsive websites and applications. Knowledge of HTML, CSS, and JavaScript required.",
+    type: "Internship",
+    salary: "₱8,000 per month",
+    deadline: "2023-05-15",
+    postedDate: "2023-04-01",
+    logo: "https://images.unsplash.com/photo-1549921296-3b0f9a35af35?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["IT", "Web Development", "Internship"]
+  },
+  {
+    id: 2,
+    title: "Marketing Assistant",
+    company: "Global Marketing PH",
+    location: "Remote",
+    description: "Part-time marketing assistant needed to help with social media campaigns, content creation, and market research.",
+    type: "Part-time",
+    salary: "₱100 per hour",
+    deadline: "2023-05-20",
+    postedDate: "2023-04-05",
+    logo: "https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["Marketing", "Social Media", "Part-time"]
+  },
+  {
+    id: 3,
+    title: "Research Assistant",
+    company: "USTP Research Department",
+    location: "USTP Campus",
+    description: "Research assistant needed for ongoing environmental science project. Duties include data collection, analysis, and report writing.",
+    type: "On-campus",
+    salary: "₱5,000 per project",
+    deadline: "2023-05-10",
+    postedDate: "2023-04-02",
+    logo: "/lovable-uploads/e89eca17-8ba6-4bae-b94e-9dd34871c79a.png",
+    tags: ["Research", "On-campus", "Environmental Science"]
+  },
+  {
+    id: 4,
+    title: "Graphic Design Freelancer",
+    company: "Creative Arts Studio",
+    location: "Flexible",
+    description: "Freelance graphic designer needed for various projects including logo design, marketing materials, and social media graphics.",
+    type: "Freelance",
+    salary: "₱5,000 - ₱10,000 per project",
+    deadline: "2023-05-25",
+    postedDate: "2023-04-08",
+    logo: "https://images.unsplash.com/photo-1534651267534-3e9649aef0a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    tags: ["Design", "Creative", "Freelance"]
+  },
+  {
+    id: 5,
+    title: "IT Help Desk Support",
+    company: "USTP IT Department",
+    location: "USTP Campus",
+    description: "Part-time IT help desk support needed to assist students and faculty with technical issues. Knowledge of basic computer troubleshooting required.",
+    type: "On-campus",
+    salary: "₱90 per hour",
+    deadline: "2023-05-12",
+    postedDate: "2023-04-03",
+    logo: "/lovable-uploads/e89eca17-8ba6-4bae-b94e-9dd34871c79a.png",
+    tags: ["IT", "On-campus", "Technical Support"]
+  },
+];
+
+const Jobs = () => {
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [jobType, setJobType] = useState('all');
+  const [sortOption, setSortOption] = useState('latest');
+
+  useEffect(() => {
+    // In a real app, this would be an API call
+    setJobs(mockJobs);
+    setFilteredJobs(mockJobs);
+  }, []);
+
+  useEffect(() => {
+    let result = [...jobs];
+    
+    // Apply job type filter
+    if (jobType !== 'all') {
+      result = result.filter(job => job.type.toLowerCase() === jobType.toLowerCase());
+    }
+    
+    // Apply search filter
+    if (searchTerm) {
+      result = result.filter(job => 
+        job.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+    }
+    
+    // Apply sorting
+    if (sortOption === 'latest') {
+      result.sort((a, b) => new Date(b.postedDate).getTime() - new Date(a.postedDate).getTime());
+    } else if (sortOption === 'deadline') {
+      result.sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
+    }
+    
+    setFilteredJobs(result);
+  }, [jobs, searchTerm, jobType, sortOption]);
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <NavBar />
+      <main className="flex-grow bg-ustp-lightgray">
+        <div className="container mx-auto px-4 py-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-ustp-blue mb-2">USTP Job Portal</h1>
+            <p className="text-gray-600">Find part-time jobs, internships, and freelance opportunities</p>
+          </div>
+          
+          <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <Input
+                  placeholder="Search jobs, companies, or skills..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full"
+                />
+              </div>
+              <div>
+                <Select value={jobType} onValueChange={setJobType}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Job Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Types</SelectItem>
+                    <SelectItem value="internship">Internship</SelectItem>
+                    <SelectItem value="part-time">Part-time</SelectItem>
+                    <SelectItem value="on-campus">On-campus</SelectItem>
+                    <SelectItem value="freelance">Freelance</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Select value={sortOption} onValueChange={setSortOption}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sort By" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="latest">Latest</SelectItem>
+                    <SelectItem value="deadline">Deadline</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mb-4 flex justify-end">
+            <Button className="bg-ustp-yellow text-black hover:brightness-95">
+              + Post Job Opportunity
+            </Button>
+          </div>
+          
+          <div className="space-y-4">
+            {filteredJobs.length > 0 ? (
+              filteredJobs.map((job) => (
+                <Card key={job.id} className="overflow-hidden hover:shadow-md transition-shadow">
+                  <div className="flex flex-col md:flex-row">
+                    <div className="p-4 md:w-1/4 flex items-center justify-center md:justify-start">
+                      <div className="w-20 h-20 rounded-md overflow-hidden bg-gray-100 flex items-center justify-center">
+                        <img 
+                          src={job.logo} 
+                          alt={job.company} 
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "/placeholder.svg";
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="md:w-3/4">
+                      <CardHeader className="p-4 pb-2">
+                        <div className="flex flex-wrap justify-between items-start">
+                          <div>
+                            <CardTitle className="text-xl">{job.title}</CardTitle>
+                            <CardDescription className="text-base font-medium">
+                              {job.company} • {job.location}
+                            </CardDescription>
+                          </div>
+                          <Badge className="bg-ustp-blue">{job.type}</Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="p-4 pt-0">
+                        <p className="text-sm text-gray-600 line-clamp-2 mb-3">{job.description}</p>
+                        <div className="flex flex-wrap gap-2">
+                          {job.tags.map((tag, index) => (
+                            <Badge key={index} variant="outline" className="bg-ustp-lightgray text-gray-700">
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                      <CardFooter className="p-4 pt-0 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                        <div>
+                          <p className="text-sm font-medium">{job.salary}</p>
+                          <div className="text-xs text-gray-500 flex gap-3">
+                            <span>Posted: {new Date(job.postedDate).toLocaleDateString()}</span>
+                            <span>Deadline: {new Date(job.deadline).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                        <Button className="bg-ustp-blue text-white hover:bg-ustp-darkblue">
+                          Apply Now
+                        </Button>
+                      </CardFooter>
+                    </div>
+                  </div>
+                </Card>
+              ))
+            ) : (
+              <div className="text-center py-12 bg-white rounded-lg shadow-sm">
+                <h3 className="text-xl font-semibold text-gray-600">No jobs found</h3>
+                <p className="text-gray-500 mt-2">Try adjusting your search or filters</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+export default Jobs;

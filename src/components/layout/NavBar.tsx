@@ -1,6 +1,6 @@
 
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
@@ -11,9 +11,51 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/components/ui/use-toast';
 
 const NavBar = () => {
+  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+    // Check current auth status
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAuthenticated(!!session);
+      setUserEmail(session?.user?.email ?? '');
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setIsAuthenticated(!!session);
+      setUserEmail(session?.user?.email ?? '');
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      navigate('/');
+      toast({
+        title: "Success",
+        description: "You have been logged out successfully.",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to log out. Please try again.",
+      });
+    }
+  };
+
+  const userInitials = userEmail
+    ? userEmail.substring(0, 2).toUpperCase()
+    : 'US';
 
   return (
     <nav className="bg-white shadow-md">
@@ -41,17 +83,17 @@ const NavBar = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src="/placeholder.svg" alt="User" />
-                      <AvatarFallback className="bg-ustp-blue text-white">US</AvatarFallback>
+                      <AvatarImage src="/placeholder.svg" alt={userEmail} />
+                      <AvatarFallback className="bg-ustp-blue text-white">{userInitials}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">USTP Student</p>
+                      <p className="text-sm font-medium leading-none">Account</p>
                       <p className="text-xs leading-none text-muted-foreground">
-                        student@ustp.edu.ph
+                        {userEmail}
                       </p>
                     </div>
                   </DropdownMenuLabel>
@@ -66,7 +108,7 @@ const NavBar = () => {
                   <DropdownMenuItem>
                     <button 
                       className="w-full text-left"
-                      onClick={() => setIsAuthenticated(false)}
+                      onClick={handleLogout}
                     >
                       Log out
                     </button>
@@ -75,13 +117,8 @@ const NavBar = () => {
               </DropdownMenu>
             ) : (
               <div className="flex items-center space-x-2">
-                <Link to="/login">
+                <Link to="/auth">
                   <Button className="bg-ustp-blue text-white hover:bg-ustp-darkblue">Login</Button>
-                </Link>
-                <Link to="/register">
-                  <Button variant="outline" className="border-ustp-blue text-ustp-blue hover:bg-ustp-blue hover:text-white">
-                    Register
-                  </Button>
                 </Link>
               </div>
             )}

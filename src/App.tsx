@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Marketplace from "./pages/Marketplace";
 import Jobs from "./pages/Jobs";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,7 +30,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/jobs" element={<Jobs />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

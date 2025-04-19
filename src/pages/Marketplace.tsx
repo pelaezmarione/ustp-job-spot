@@ -132,26 +132,26 @@ const Marketplace = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
-      <main className="flex-grow bg-ustp-lightgray">
+      <main className="flex-grow bg-gradient-to-br from-white to-ustp-gray">
         <div className="container mx-auto px-4 py-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-ustp-blue mb-2">USTP Marketplace</h1>
-            <p className="text-gray-600">Buy, sell, or trade items with fellow USTP students</p>
+          <div className="mb-8 animate-fade-in">
+            <h1 className="text-4xl font-bold text-ustp-darkblue mb-2">USTP Marketplace</h1>
+            <p className="text-gray-600 text-lg">Buy, sell, or trade items with fellow USTP students</p>
           </div>
           
-          <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
+          <div className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-sm mb-6 transition-all duration-300 hover:shadow-md">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
+              <div className="relative">
                 <Input
                   placeholder="Search for items..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full"
+                  className="w-full pl-4 transition-all duration-300 focus:ring-2 focus:ring-ustp-yellow"
                 />
               </div>
               <div>
                 <Select value={category} onValueChange={setCategory}>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full transition-all duration-300 hover:border-ustp-blue">
                     <SelectValue placeholder="Select Category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -165,7 +165,7 @@ const Marketplace = () => {
               </div>
               <div>
                 <Select value={sortOption} onValueChange={setSortOption}>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full transition-all duration-300 hover:border-ustp-blue">
                     <SelectValue placeholder="Sort By" />
                   </SelectTrigger>
                   <SelectContent>
@@ -179,24 +179,30 @@ const Marketplace = () => {
           </div>
           
           <div className="mb-4 flex justify-end">
-            <Button className="bg-ustp-yellow text-black hover:brightness-95">
+            <Button 
+              className="bg-ustp-yellow text-black hover:brightness-95 transform transition-all duration-300 hover:scale-105 active:scale-95"
+            >
               + Post Item for Sale
             </Button>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => (
-                <Card key={product.id} className="overflow-hidden hover:shadow-md transition-shadow">
-                  <div className="h-48 overflow-hidden">
+              filteredProducts.map((product, index) => (
+                <Card 
+                  key={product.id} 
+                  className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 animate-fade-in"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="h-48 overflow-hidden group">
                     <img 
                       src={product.image} 
                       alt={product.title} 
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                     />
                   </div>
                   <CardHeader className="p-4 pb-2">
-                    <CardTitle className="text-lg">{product.title}</CardTitle>
+                    <CardTitle className="text-lg text-ustp-darkblue">{product.title}</CardTitle>
                     <CardDescription className="text-ustp-blue font-semibold">
                       ₱{product.price.toFixed(2)}
                     </CardDescription>
@@ -204,20 +210,23 @@ const Marketplace = () => {
                   <CardContent className="p-4 pt-0">
                     <p className="text-sm text-gray-600 line-clamp-2">{product.description}</p>
                     <div className="flex justify-between mt-2 text-xs text-gray-500">
-                      <span>{product.category}</span>
-                      <span>{product.condition}</span>
+                      <span className="bg-ustp-gray/50 px-2 py-1 rounded-full">{product.category}</span>
+                      <span className="bg-ustp-gray/50 px-2 py-1 rounded-full">{product.condition}</span>
                     </div>
                   </CardContent>
-                  <CardFooter className="p-4 pt-0 flex justify-between">
+                  <CardFooter className="p-4 pt-0 flex justify-between items-center">
                     <span className="text-xs text-gray-500">Posted by {product.seller}</span>
-                    <Button size="sm" className="bg-ustp-blue text-white hover:bg-ustp-darkblue">
+                    <Button 
+                      size="sm" 
+                      className="bg-ustp-blue text-white hover:bg-ustp-darkblue transition-colors duration-300"
+                    >
                       View Details
                     </Button>
                   </CardFooter>
                 </Card>
               ))
             ) : (
-              <div className="col-span-3 text-center py-8">
+              <div className="col-span-3 text-center py-12 animate-fade-in">
                 <h3 className="text-xl font-semibold text-gray-600">No items found</h3>
                 <p className="text-gray-500 mt-2">Try adjusting your search or filters</p>
               </div>

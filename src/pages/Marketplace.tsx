@@ -38,7 +38,7 @@ const Marketplace = () => {
       if (error) throw error;
 
       const productsWithId = data.map((item) => ({
-        id: parseInt(item.id.substring(0, 8), 16), // Convert UUID to number for compatibility
+        id: item.id, // Keep the ID as a string
         title: item.title,
         description: item.description,
         price: parseFloat(item.price),

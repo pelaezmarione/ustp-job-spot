@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -56,25 +55,25 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <NavBar />
       <main className="flex-grow">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-r from-ustp-blue to-ustp-darkblue text-white py-16 md:py-24">
+        {/* Hero Section with Modern Gradient */}
+        <section className="modern-gradient text-white py-16 md:py-24">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6 animate-fade-in">
                 <h1 className="text-4xl md:text-5xl font-bold leading-tight">
                   USTP Student Opportunity System
                 </h1>
-                <p className="text-xl text-gray-200">
+                <p className="text-xl text-white/80">
                   Connect with marketplace opportunities and job listings tailored for USTP students.
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <Link to="/marketplace">
-                    <Button className="bg-ustp-yellow text-black hover:brightness-95 font-semibold px-6 py-2">
+                    <Button className="modern-button">
                       Explore Marketplace
                     </Button>
                   </Link>
                   <Link to="/jobs">
-                    <Button className="bg-white text-ustp-blue hover:bg-gray-100 font-semibold px-6 py-2">
+                    <Button variant="secondary" className="modern-button-secondary">
                       Browse Jobs
                     </Button>
                   </Link>

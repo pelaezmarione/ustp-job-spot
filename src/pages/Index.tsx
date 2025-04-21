@@ -62,7 +62,7 @@ const Index = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6 animate-fade-in">
                 <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-                  USTP Student Opportunity System
+                  USTP Student Opportunity Systems
                 </h1>
                 <p className="text-xl text-white/80">
                   Connect with marketplace opportunities and job listings tailored for USTP students.

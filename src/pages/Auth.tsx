@@ -6,15 +6,38 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const Auth = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Check if user is already logged in
+  // Login state
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+
+  // Register state
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    userType: 'student',
+    password: '',
+    confirmPassword: ''
+  });
+
+  // Handle field changes for register
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleUserTypeChange = (value: string) => {
+    setFormData(prev => ({ ...prev, userType: value }));
+  };
+
+  // Check if user is already logged in, and set up auth change
   useEffect(() => {
     const checkUser = async () => {
       const { data } = await supabase.auth.getSession();
@@ -22,10 +45,8 @@ const Auth = () => {
         navigate('/marketplace');
       }
     };
-    
     checkUser();
-    
-    // Set up auth state listener
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (event === 'SIGNED_IN' && session) {
@@ -37,36 +58,97 @@ const Auth = () => {
         }
       }
     );
-    
     return () => {
       subscription.unsubscribe();
     };
   }, [navigate]);
 
-  const handleAuth = async (e: React.FormEvent) => {
+  // --- LOGIN ---
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: loginEmail,
+        password: loginPassword,
+      });
+      if (error) throw error;
+      // Login redirect handled in effect
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // --- REGISTER ---
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
+    // Validate fields
+    if (
+      !formData.firstName.trim() ||
+      !formData.lastName.trim() ||
+      !formData.email.trim() ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please fill in all fields.",
+      });
+      setLoading(false);
+      return;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Passwords do not match.",
+      });
+      setLoading(false);
+      return;
+    }
+    if (
+      formData.userType === 'student' &&
+      !formData.email.endsWith('@ustp.edu.ph')
+    ) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Students must use a USTP email (@ustp.edu.ph).",
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
-      if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-        });
-        if (error) throw error;
-        toast({
-          title: "Registration successful!",
-          description: "Please check your email to verify your account. If you don't see email verification in your Supabase settings, you can log in right away.",
-        });
-        setIsLogin(true); // Switch to login view after registration
-      }
-    } catch (error) {
+      const { error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            user_type: formData.userType,
+          },
+        },
+      });
+      if (error) throw error;
+      toast({
+        title: "Registration successful!",
+        description: "Please check your email to verify your account. If you don't see email verification in your Supabase settings, you can log in right away.",
+      });
+      setIsLogin(true); // Ready to login
+      // Optionally auto-fill login email
+      setLoginEmail(formData.email);
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Error",
@@ -78,9 +160,9 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-ustp-gray px-4">
+    <div className="min-h-screen flex items-center justify-center modern-gradient px-4">
       <div className="w-full max-w-md">
-        <div className="bg-white p-8 rounded-xl shadow-lg">
+        <div className="bg-white rounded-xl shadow-lg p-8 border-2 border-primary/30">
           <div className="flex justify-center mb-8">
             <img 
               src="/lovable-uploads/e89eca17-8ba6-4bae-b94e-9dd34871c79a.png" 
@@ -88,37 +170,138 @@ const Auth = () => {
               className="h-16 w-16 object-contain" 
             />
           </div>
-          <h2 className="text-2xl font-bold text-center text-ustp-darkblue mb-6">
+          <h2 className="text-2xl font-bold text-center mb-6" style={{ color: "#1F1B4F" }}>
             {isLogin ? 'Welcome Back!' : 'Create an Account'}
           </h2>
-          <form onSubmit={handleAuth} className="space-y-4">
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full"
-                placeholder="Enter your email"
-              />
-            </div>
-            <div>
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full"
-                placeholder="Enter your password"
-              />
-            </div>
+          <form 
+            onSubmit={isLogin ? handleLogin : handleRegister} 
+            className="space-y-4"
+            autoComplete="off"
+          >
+            {!isLogin && (
+              <>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input
+                      id="firstName"
+                      type="text"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      autoComplete="off"
+                      required
+                      className="w-full"
+                      placeholder="First Name"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input
+                      id="lastName"
+                      type="text"
+                      value={formData.lastName}
+                      onChange={handleChange}
+                      autoComplete="off"
+                      required
+                      className="w-full"
+                      placeholder="Last Name"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    autoComplete="off"
+                    required
+                    className="w-full"
+                    placeholder="Enter your email"
+                  />
+                  {formData.userType === 'student' && (
+                    <span className="block text-xs text-gray-500 mt-1">Use your USTP email (example@ustp.edu.ph)</span>
+                  )}
+                </div>
+                <div>
+                  <Label htmlFor="userType">User Type</Label>
+                  <Select value={formData.userType} onValueChange={handleUserTypeChange}>
+                    <SelectTrigger id="userType" className="w-full">
+                      <SelectValue>{formData.userType === "student" ? "Student" : "Employer"}</SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="student">Student</SelectItem>
+                      <SelectItem value="employer">Employer</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    autoComplete="new-password"
+                    className="w-full"
+                    placeholder="Password"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    required
+                    autoComplete="new-password"
+                    className="w-full"
+                    placeholder="Confirm Password"
+                  />
+                </div>
+              </>
+            )}
+            {isLogin && (
+              <>
+                <div>
+                  <Label htmlFor="loginEmail">Email</Label>
+                  <Input
+                    id="loginEmail"
+                    type="email"
+                    value={loginEmail}
+                    onChange={e => setLoginEmail(e.target.value)}
+                    required
+                    autoComplete="username"
+                    className="w-full"
+                    placeholder="Enter your email"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="loginPassword">Password</Label>
+                  <Input
+                    id="loginPassword"
+                    type="password"
+                    value={loginPassword}
+                    onChange={e => setLoginPassword(e.target.value)}
+                    required
+                    autoComplete="current-password"
+                    className="w-full"
+                    placeholder="Enter your password"
+                  />
+                </div>
+              </>
+            )}
             <Button 
               type="submit" 
-              className="w-full bg-ustp-blue hover:bg-ustp-darkblue"
+              className="w-full"
+              style={{
+                background: isLogin ? '#1F1B4F' : '#F9BF3B',
+                color: isLogin ? '#F9BF3B' : '#1F1B4F',
+                fontWeight: 600,
+              }}
               disabled={loading}
             >
               {loading ? 'Loading...' : isLogin ? 'Login' : 'Sign Up'}
@@ -127,9 +310,13 @@ const Auth = () => {
           <div className="mt-4 text-center">
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="text-ustp-blue hover:underline"
+              className="text-[#1F1B4F] hover:underline font-medium"
+              type="button"
             >
-              {isLogin ? "Don't have an account? Sign Up" : 'Already have an account? Login'}
+              {isLogin 
+                ? "Don't have an account? Sign Up"
+                : 'Already have an account? Login'
+              }
             </button>
           </div>
         </div>

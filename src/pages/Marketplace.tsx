@@ -41,7 +41,7 @@ const Marketplace = () => {
         id: String(item.id), // Explicitly convert id to string to match the Product type
         title: item.title,
         description: item.description,
-        price: parseFloat(item.price),
+        price: item.price, // Removed parseFloat because price is already a number
         seller: item.seller_name,
         category: item.category,
         condition: item.condition,

@@ -38,7 +38,7 @@ const Marketplace = () => {
       if (error) throw error;
 
       const productsWithId = data.map((item) => ({
-        id: item.id, // ID is now correctly typed as string
+        id: String(item.id), // Always convert id to string here to match type
         title: item.title,
         description: item.description,
         price: parseFloat(item.price),

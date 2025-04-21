@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -13,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
+import traillogo from '../../image/traillogo.png';
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -64,18 +64,25 @@ const NavBar = () => {
           <div className="flex items-center space-x-4">
             <Link to="/" className="flex items-center space-x-2">
               <img 
-                src="/lovable-uploads/e89eca17-8ba6-4bae-b94e-9dd34871c79a.png" 
+                src={traillogo} 
                 alt="USTP Logo" 
-                className="h-10 w-10 object-contain" 
+                className="h-20 w-20 object-contain" 
               />
-              <span className="text-lg font-bold text-ustp-blue">USTP Opportunity System</span>
+              <h1 className="text-ustp-darkblue text-xl font-extrabold tracking-wide"> TRAIL</h1>
+              <span className="text-l font-semi bold text-ustp-yellow tracking-wide">SYSTEM</span>
             </Link>
           </div>
           <div className="flex items-center space-x-4">
-            <Link to="/marketplace" className="text-gray-700 hover:text-ustp-blue transition-colors">
+            <Link to="/marketplace" className="flex items-center text-gray-700 hover:text-ustp-blue transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
               Marketplace
             </Link>
-            <Link to="/jobs" className="text-gray-700 hover:text-ustp-blue transition-colors">
+            <Link to="/jobs" className="flex items-center text-gray-700 hover:text-ustp-blue transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
               Jobs
             </Link>
             {isAuthenticated ? (

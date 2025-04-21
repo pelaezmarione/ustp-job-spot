@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import NavBar from '@/components/layout/NavBar';
 import Footer from '@/components/layout/Footer';
+import itlogo from '../image/ustpit.jpg';
 
 const Index = () => {
   const [featuredMarketplaceItems] = useState([
@@ -79,11 +80,12 @@ const Index = () => {
                   </Link>
                 </div>
               </div>
-              <div className="hidden md:block">
+              <div className="hidden md:block" >
                 <img 
-                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" 
+                  src={itlogo} 
                   alt="USTP Opportunity System" 
-                  className="rounded-lg shadow-xl max-h-96 object-cover w-full" 
+                  className="max-h-96 object-cover w-full"
+                  style={{ boxShadow: '0px 5px 20px  #1F1B4F', borderRadius: '2px' }}
                 />
               </div>
             </div>
@@ -110,7 +112,7 @@ const Index = () => {
               </div>
               
               <div className="bg-ustp-lightgray p-6 rounded-lg text-center">
-                <div className="w-16 h-16 mx-auto mb-4 bg-ustp-blue text-white rounded-full flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto mb-4 bg-ustp-darkblue text-white rounded-full flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
@@ -198,26 +200,6 @@ const Index = () => {
         </section>
 
         {/* Call to Action */}
-        <section className="py-16 bg-ustp-blue text-white text-center">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold mb-6">Ready to Get Started?</h2>
-            <p className="text-xl mb-8 max-w-2xl mx-auto">
-              Join the USTP Student Opportunity System today and connect with the resources you need for success.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/register">
-                <Button className="bg-ustp-yellow text-black hover:brightness-95 font-semibold px-8 py-3 text-lg">
-                  Create an Account
-                </Button>
-              </Link>
-              <Link to="/login">
-                <Button className="bg-white text-ustp-blue hover:bg-gray-100 font-semibold px-8 py-3 text-lg">
-                  Login
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </section>
       </main>
       <Footer />
     </div>

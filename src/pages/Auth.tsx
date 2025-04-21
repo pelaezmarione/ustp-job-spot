@@ -7,6 +7,9 @@ import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import traillogo from '../image/traillogo.png';
+import ustplogo from '../image/ustpbg.jpg';
+
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -160,19 +163,28 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center modern-gradient px-4">
+    <div className="min-h-screen flex items-center justify-center modern-gradient px-4"
+      style={{background: `
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url(${ustplogo}) center/cover no-repeat
+      `, }}>
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-xl shadow-lg p-8 border-2 border-primary/30">
-          <div className="flex justify-center mb-8">
-            <img 
-              src="/lovable-uploads/e89eca17-8ba6-4bae-b94e-9dd34871c79a.png" 
-              alt="USTP Logo" 
-              className="h-16 w-16 object-contain" 
-            />
-          </div>
+        <div className="bg-white p-8 " style={{ borderRadius: '1px', boxShadow: isLogin ? '10px 10px 0px 0px #1F1B4F' : ' 10px 10px 0px 0px #F9BF3B', }}>
           <h2 className="text-2xl font-bold text-center mb-6" style={{ color: "#1F1B4F" }}>
             {isLogin ? 'Welcome Back!' : 'Create an Account'}
           </h2>
+          <div className="flex justify-center mb-8">
+            <img 
+              src={traillogo} 
+              alt="USTP Logo" 
+              className="object-contain"
+              style={{height: '100px', width: '120px' }} 
+            />
+          </div>
+          
+          <p className="text-center text-gray-600 mb-4">
+            {isLogin ? 'Login to your account' : 'Sign up to get started'}
+          </p>
           <form 
             onSubmit={isLogin ? handleLogin : handleRegister} 
             className="space-y-4"
@@ -298,8 +310,8 @@ const Auth = () => {
               type="submit" 
               className="w-full"
               style={{
-                background: isLogin ? '#1F1B4F' : '#F9BF3B',
-                color: isLogin ? '#F9BF3B' : '#1F1B4F',
+                background: isLogin ? '#F9BF3B' : '#1F1B4F',
+                color: isLogin ? 'white' : 'white',
                 fontWeight: 600,
               }}
               disabled={loading}

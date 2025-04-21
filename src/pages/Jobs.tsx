@@ -59,7 +59,7 @@ const mockJobs: Job[] = [
     salary: "₱5,000 per project",
     deadline: "2023-05-10",
     postedDate: "2023-04-02",
-    logo: "/lovable-uploads/e89eca17-8ba6-4bae-b94e-9dd34871c79a.png",
+    logo: "https://scontent.fcgy2-2.fna.fbcdn.net/v/t39.30808-1/486852489_985098540486236_8200406653387184104_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=101&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeE_UqZjgsLY63KFLSbijTT8UVSWjS9EOe1RVJaNL0Q57T4GtM8B5VoIstheiUp1rsFrl02gFQwWVkXjNsulS6fu&_nc_ohc=HhyTmGNHYlwQ7kNvwGjQmSx&_nc_oc=AdnD0QVFjF_9jJ65O6buddzwq4jgcuhYgRr2ChE1dK2c_lUuDTIkcUVW5zS7U7vU62s&_nc_zt=24&_nc_ht=scontent.fcgy2-2.fna&_nc_gid=BYLJ7IiKuc5ZCMDtbd-HcQ&oh=00_AfHYTat4Es7g_MjaDnR-8a08uMPvzJXI8G2Y-ZgAa0NWvQ&oe=680BE4B7",
     tags: ["Research", "On-campus", "Environmental Science"]
   },
   {
@@ -72,7 +72,7 @@ const mockJobs: Job[] = [
     salary: "₱5,000 - ₱10,000 per project",
     deadline: "2023-05-25",
     postedDate: "2023-04-08",
-    logo: "https://images.unsplash.com/photo-1534651267534-3e9649aef0a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    logo: "https://scontent.fcgy2-4.fna.fbcdn.net/v/t39.30808-1/487150399_2090189021402714_2255233814080924158_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=110&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeEahKB_uYzyFCEfHOsvGPKpnZvdoCmW2Hmdm92gKZbYecTupaRYcGTqSNbNoAu6oBLaf6HoRuJIBrjuL_mz6Ytk&_nc_ohc=1YrjjGgB7w0Q7kNvwHrbzND&_nc_oc=Adnb4YhbWQvkMnDB86OuSDWQvuZs2r-R0bnTl1THBO3VGIlkikaiDCFPJgVh_7ri8jw&_nc_zt=24&_nc_ht=scontent.fcgy2-4.fna&_nc_gid=2kieSCJET9NF4utMLg-TUg&oh=00_AfGZvFJOLV0p8RLdnKmcrW7ju--IpVaybAiAiT32BHXJ1g&oe=680BDFD3",
     tags: ["Design", "Creative", "Freelance"]
   },
   {
@@ -85,7 +85,7 @@ const mockJobs: Job[] = [
     salary: "₱90 per hour",
     deadline: "2023-05-12",
     postedDate: "2023-04-03",
-    logo: "/lovable-uploads/e89eca17-8ba6-4bae-b94e-9dd34871c79a.png",
+    logo: "https://scontent.fcgy2-2.fna.fbcdn.net/v/t39.30808-1/481425921_1360638085371613_6720374098615888538_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=103&ccb=1-7&_nc_sid=1d2534&_nc_eui2=AeHr6C7cOFsBmM8hrRhm45NtrmXxFeEopymuZfEV4SinKWpTU6vnOQc6plNx8o7mxqQkXwy0y-DN-LR7ue_mdBg_&_nc_ohc=vV_Cpqr2-m8Q7kNvwGWaAQ0&_nc_oc=AdkRhyYVxNZi-ORwQ3Xaxv14Nm5uttEcXDDwC-EUjFBQb9Fi7lwO0gzIetuQPm8qhXI&_nc_zt=24&_nc_ht=scontent.fcgy2-2.fna&_nc_gid=GGv1dapZPu8dcLRtjDM-gQ&oh=00_AfEsK12fz-Qc4_ky3xkS7aveqjbLkwnyRGQOhpxLlIngpA&oe=680BD473",
     tags: ["IT", "On-campus", "Technical Support"]
   },
 ];
@@ -211,7 +211,7 @@ const Jobs = () => {
                               {job.company} • {job.location}
                             </CardDescription>
                           </div>
-                          <Badge className="bg-ustp-blue">{job.type}</Badge>
+                          <Badge className="bg-ustp-blue text-white">{job.type}</Badge>
                         </div>
                       </CardHeader>
                       <CardContent className="p-4 pt-0">

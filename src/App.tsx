@@ -8,8 +8,6 @@ import { AuthProvider } from "@/context/AuthProvider";
 
 // Pages
 import Index from "./pages/Index";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Marketplace from "./pages/Marketplace";
 import Jobs from "./pages/Jobs";
@@ -35,8 +33,6 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
             <Route
               path="/dashboard"
               element={

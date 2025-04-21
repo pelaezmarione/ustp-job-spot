@@ -70,8 +70,8 @@ export default {
         },
         ustp: {
           blue: '#1A75BC',
-          yellow: '#1F1B4F', // Replacing with new primary
-          darkblue: '#0A3A5E',
+          yellow: '#F9BF3B', 
+          darkblue: '#1F1B4F',
           gray: '#F5F5F5',
           lightgray: '#F9F9F9'
         }
@@ -113,7 +113,11 @@ export default {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.5s ease-out'
-			}
+			},
+
+			fontFamily: {
+				sans: ['Inter', 'Roboto', 'Poppins', 'sans-serif'],
+			  },
     }
   },
   plugins: [require("tailwindcss-animate")],

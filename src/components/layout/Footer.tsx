@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-ustp-blue text-white py-8">
+    <footer className="bg-ustp-darkblue text-white py-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
@@ -43,7 +43,7 @@ const Footer = () => {
               University of Science and Technology of Southern Philippines
             </p>
             <p className="text-sm text-gray-300">
-              Email: info@ustp.edu.ph
+              Email: RecMarSaluds@ustp.edu.ph
             </p>
           </div>
         </div>

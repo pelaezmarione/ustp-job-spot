@@ -75,14 +75,14 @@ const Dashboard = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-ustp-blue">My Dashboard</h1>
-              <p className="text-gray-600">Manage your listings and applications</p>
+              <h1 className="text-3xl font-bold text-ustp-darkblue">My Dashboard</h1>
+              <p className="text-gray-600 ">Manage your listings and applications</p>
             </div>
             <div className="flex gap-2">
-              <Button className="bg-ustp-yellow text-black hover:brightness-95">
-                + New Listing
+              <Button className="bg-ustp-yellow text-white hover:brightness-50">
+                New Listing
               </Button>
-              <Button className="bg-ustp-blue text-white hover:bg-ustp-darkblue">
+              <Button className="bg-ustp-darkblue text-white hover:brightness-50">
                 Find Opportunities
               </Button>
             </div>
@@ -146,7 +146,7 @@ const Dashboard = () => {
                               <h4 className="font-medium">{item.title}</h4>
                               <p className="text-sm text-gray-500">₱{item.price.toFixed(2)}</p>
                             </div>
-                            <Badge className={item.status === 'active' ? 'bg-green-500' : 'bg-gray-500'}>
+                            <Badge className={item.status === 'active' ? 'bg-green-500 text-white' : 'bg-gray-500 text-white'}>
                               {item.status === 'active' ? 'Active' : 'Sold'}
                             </Badge>
                           </div>
@@ -173,7 +173,7 @@ const Dashboard = () => {
                                 <h4 className="font-medium">{application.jobTitle}</h4>
                                 <p className="text-sm text-gray-500">{application.company}</p>
                               </div>
-                              <Badge className="bg-ustp-blue">{application.type}</Badge>
+                              <Badge className="bg-ustp-blue text-white">{application.type}</Badge>
                             </div>
                             <div className="flex justify-between mt-2 text-sm">
                               <span className="text-gray-500">Applied: {new Date(application.appliedDate).toLocaleDateString()}</span>
@@ -216,7 +216,7 @@ const Dashboard = () => {
                             </div>
                           </div>
                           <div className="flex flex-col space-y-2">
-                            <Badge className={item.status === 'active' ? 'bg-green-500' : 'bg-gray-500'}>
+                            <Badge className={item.status === 'active' ? 'bg-green-500 text-white' : 'bg-gray-500 text-white'}>
                               {item.status === 'active' ? 'Active' : 'Sold'}
                             </Badge>
                             <div className="flex space-x-1">
@@ -259,7 +259,7 @@ const Dashboard = () => {
                               <h4 className="font-medium text-lg">{application.jobTitle}</h4>
                               <p className="text-gray-600">{application.company}</p>
                             </div>
-                            <Badge className="bg-ustp-blue">{application.type}</Badge>
+                            <Badge className="bg-ustp-blue text-white">{application.type}</Badge>
                           </div>
                           <div className="flex justify-between mt-4 items-center">
                             <div>
@@ -309,7 +309,7 @@ const Dashboard = () => {
                                 <p className="text-gray-600">₱{item.price} • Seller: {item.seller}</p>
                               )}
                             </div>
-                            <Badge className={item.type === 'job' ? 'bg-ustp-blue' : 'bg-ustp-yellow text-black'}>
+                            <Badge className={item.type === 'job' ? 'bg-ustp-blue text-white' : 'bg-ustp-yellow text-white'}>
                               {item.type === 'job' ? 'Job' : 'Marketplace'}
                             </Badge>
                           </div>
@@ -352,41 +352,24 @@ const Dashboard = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                            <input type="text" defaultValue="John" className="ustp-input" />
+                            <input type="text" defaultValue="Recmar" className="ustp-input" />
                           </div>
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                            <input type="text" defaultValue="Doe" className="ustp-input" />
+                            <input type="text" defaultValue="Maloys" className="ustp-input" />
                           </div>
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                          <input type="email" defaultValue="john.doe@ustp.edu.ph" className="ustp-input" />
+                          <input type="email" defaultValue="rec.maloys@ustp.edu.ph" className="ustp-input" />
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">Student ID</label>
-                          <input type="text" defaultValue="2023300787" className="ustp-input" readOnly />
+                          <input type="text" defaultValue="2023300767" className="ustp-input" readOnly />
                         </div>
                       </div>
                     </div>
 
-                    <div>
-                      <h3 className="text-lg font-medium mb-4">Notification Preferences</h3>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <label className="text-sm text-gray-700">Email notifications for new job listings</label>
-                          <input type="checkbox" defaultChecked className="h-4 w-4 text-ustp-blue" />
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <label className="text-sm text-gray-700">Email notifications for marketplace activity</label>
-                          <input type="checkbox" defaultChecked className="h-4 w-4 text-ustp-blue" />
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <label className="text-sm text-gray-700">Email notifications for application updates</label>
-                          <input type="checkbox" defaultChecked className="h-4 w-4 text-ustp-blue" />
-                        </div>
-                      </div>
-                    </div>
 
                     <div>
                       <h3 className="text-lg font-medium mb-4">Change Password</h3>
